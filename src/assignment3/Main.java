@@ -17,12 +17,13 @@ package assignment3;
 import java.util.*;
 import java.io.*;
 
-public class  		Main {
+public class Main {
 	
 	// static variables and constants only here.
-	
+	static ArrayList<String> badWords;
+
 	public static void main(String[] args) throws Exception {
-		
+
 		Scanner kb;	// input Scanner for commands
 		PrintStream ps;	// output file, for student testing and grading only
 		// If arguments are specified, read/write from/to files instead of Std IO.
@@ -35,16 +36,16 @@ public class  		Main {
 			ps = System.out;			// default output to Stdout
 		}
 		initialize();
-		
 		// TODO methods to read in words, output ladder
 	}
-	
-	public static void initialize() {
-		// initialize your static variables or constants here.
-		// We will call this method before running our JUNIT tests.  So call it 
-		// only once at the start of main.
-	}
-	
+
+    public static void initialize() {
+        // initialize your static variables or constants here.
+        // We will call this method before running our JUNIT tests.  So call it
+        // only once at the start of main.
+        badWords = new ArrayList<String>();
+    }
+
 	/**
 	 * @param keyboard Scanner connected to System.in
 	 * @return ArrayList of Strings containing start word and end word. 
@@ -77,7 +78,14 @@ public class  		Main {
     
 	
 	public static void printLadder(ArrayList<String> ladder) {
-		
+        if(ladder.size()==2)
+            System.out.println("no word ladder exists between " + ladder.get(0) + " and " + ladder.get(1));
+        else{
+            System.out.println("a " + (ladder.size()-2) + "-rung world ladder exists between "+ ladder.get(0) + " and " + ladder.get(ladder.size()-1));
+            for( String s : ladder){
+                System.out.println(s);
+            }
+        }
 	}
 	// TODO
 	// Other private static methods here
