@@ -36,6 +36,8 @@ public class Main {
 			ps = System.out;			// default output to Stdout
 		}
 		initialize();
+        ArrayList<String> res = Main.getWordLadderBFS("smart", "money");
+        printLadder(res);
 		// TODO methods to read in words, output ladder
 	}
 
@@ -48,7 +50,7 @@ public class Main {
 
 	/**
 	 * @param keyboard Scanner connected to System.in
-	 * @return ArrayList of Strings containing start word and end word. 
+	 * @return ArrayList of Strings containing start word and end word.
 	 * If command is /quit, return empty ArrayList. 
 	 */
     public static ArrayList<String> parse(Scanner keyboard) {
@@ -65,7 +67,6 @@ public class Main {
     }
 	
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
-		
 		// Returned list should be ordered start to end.  Include start and end.
 		// If ladder is empty, return list with just start and end.
 		// TODO some code
@@ -76,12 +77,58 @@ public class Main {
 	}
 	
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
-		
-		// TODO some code
+    	int index=0;
+    	ArrayList<String> res = new ArrayList();
 		Set<String> dict = makeDictionary();
-		// TODO more code
-		
-		return null; // replace this line later with real return
+    	Queue<String> q = new LinkedList();
+    	HashMap<String, String> map = new HashMap(); //created a hashmap instead of set to keep track of visited words and path between start and end
+    	q.add(start);
+		String prev_word="";
+    	while(!q.isEmpty()){
+    		String word = ((LinkedList<String>) q).remove(0);
+    		if(word==start){
+				map.put(null, word);
+			}
+
+    		if(word.equals(end.toUpperCase())){
+    		    res.add(start);
+    			res.add(end);
+				return res;
+			}
+    		if(word!=end){
+
+			}
+    		char[] arr = word.toCharArray();
+    		for(int i =0; i< arr.length; i++){
+    			for(char c='a'; c<'z';c++){
+    				char t = arr[i];
+    				if(t!=c)
+    					arr[i]=c;
+					String new_word = new String(arr);
+					if(dict.contains(new_word.toUpperCase()) &&!map.containsKey(new_word) && !map.containsValue(new_word) && !q.contains(new_word)){
+						q.add(new_word);
+						map.put(new_word, word);
+						if(new_word.equals(end)){
+						    ArrayList<String> arev = new ArrayList<>();
+						    arev.add(end);
+						    int n_index = index-1;
+						    String w = end;
+						    while(w!=null){
+						        w=map.get(w);
+						        arev.add(0,w);
+                            }
+                            arev.remove(0);
+						    return arev;
+						}
+					}
+					arr[i]=t;
+				}
+			}
+
+		}
+		res.add(start);
+    	res.add(end);
+		return res; // replace this line later with real return
 	}
     
 	
