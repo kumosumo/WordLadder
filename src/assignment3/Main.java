@@ -2,7 +2,7 @@
  * EE422C Project 3 submission by
  * Kumaran Arulmani
  * ka27395
- * <Student1 5-digit Unique No.>
+ * 16370
  * Cristian Ascencio
  * cea2396
  * 16345
@@ -102,7 +102,15 @@ public class Main {
 		}
 		return res; 
 	}
-	
+
+    /**
+     * after checking both words to make sure they are found within the dictionary, this function goes through each
+     * level and checks all possible solutions, ensuring that the shortest path is found. To help, I created a hashmap to keep track of all words that were connected and later used it as a means to populate tthe final arrray
+     * @param start
+     * @param end
+     *
+     * @return Arraylist with either a compelete word ladder or one with just start and the end
+     */
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
     	int index=0;
     	ArrayList<String> res = new ArrayList();
