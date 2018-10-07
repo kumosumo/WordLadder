@@ -1,14 +1,13 @@
 /* WORD LADDER Main.java
  * EE422C Project 3 submission by
- * Replace <...> with your actual data.
- * <Student1 Name>
- * <Student1 EID>
+ * Kumaran Arulmani
+ * ka27395
  * <Student1 5-digit Unique No.>
- * <Student2 Name>
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
+ * Cristian Ascencio
+ * cea2396
+ * 16345
  * Slip days used: <0>
- * Git URL:
+ * Git URL: https://github.com/kumosumo/WordLadder.git
  * Fall 2018
  */
 
@@ -20,8 +19,12 @@ import java.io.*;
 public class Main {
 	
 	// static variables and constants only here.
+	/** 
+	 * barWords is used to keep track of words that lead to dead ends in order to save time finding ladder.
+	 * pathDFS is used to keep track of word ladder while investigating next possible nodes
+	 */
 	static ArrayList<String> badWords;
-	static HashMap<String, String> pathDFS;
+	static ArrayList<String> pathDFS;
 
 	public static void main(String[] args) throws Exception {
 
@@ -37,8 +40,11 @@ public class Main {
 			ps = System.out;			// default output to Stdout
 		}
 		initialize();
-        ArrayList<String> res = Main.getWordLadderBFS("svart", "money");
+        ArrayList<String> res = Main.getWordLadderBFS("smart", "money");
         printLadder(res);
+        System.out.println();
+        //res = Main.getWordLadderDFS("smart", "money");
+        //printLadder(res);
 		// TODO methods to read in words, output ladder
 	}
 
@@ -47,7 +53,7 @@ public class Main {
         // We will call this method before running our JUNIT tests.  So call it
         // only once at the start of main.
         badWords = new ArrayList<String>();
-        pathDFS = new HashMap<String, String>();
+        pathDFS = new ArrayList<String>();
     }
 
 	/**
@@ -68,18 +74,25 @@ public class Main {
     	return inputList;
     }
 	  
+    /**
+     * if start/end are not in dictionary or if no valid word ladder, return ArrayList with just start and end.
+     * if a world list is found, iterate over pathDFS and add to result
+     * @param start
+     * @param end
+     * @return res which holds either a valid word ladder, or if no word ladder found, just start and end.
+     */
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		// Returned list should be ordered start to end.  Include start and end.
 		// If ladder is empty, return list with just start and end.
 		ArrayList<String> res = new ArrayList<String>();
 		Set<String> dict = makeDictionary();
-		pathDFS.put(null, start);
+		pathDFS.add(start);
 		if(!dict.contains(start.toUpperCase()) || !dict.contains(end.toUpperCase())) {
 			res.add(start);
 			res.add(end);
 		}
 		if(helperDFS(start, end, dict)) {
-			for(String word : pathDFS.values()) {
+			for(String word : pathDFS) {
 				res.add(word);
 			}
 		}
@@ -87,7 +100,7 @@ public class Main {
 			res.add(start);
 			res.add(end);
 		}
-		return res; // replace this line later with real return
+		return res; 
 	}
 	
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
@@ -165,6 +178,15 @@ public class Main {
 	}
 	// TODO
 	// Other private static methods here
+	/**
+	 * recursive part of DFS. creates new string with next valid word and checks whether it is valid
+	 * until all options exhausted or word ladder complete
+	 * stores current path into pathDFS
+	 * @param start, holds 
+	 * @param end, holds the end words we want to reach
+	 * @param dict, holds reference to the dictionary
+	 * @return returns true or false depending on whether a world ladder was found or not
+	 */
 	private static boolean helperDFS(String start, String end, Set<String> dict) {
 		char[] startChar;
 		String new_start;
@@ -180,13 +202,13 @@ public class Main {
 					startChar[i]=j;
 				}
 				new_start = new String(startChar);
-				if(dict.contains(new_start.toUpperCase()) && !badWords.contains(new_start) && !pathDFS.containsKey(new_start) && !pathDFS.containsValue(new_start)) {
-					pathDFS.put(start, new_start);
+				if(dict.contains(new_start.toUpperCase()) && !badWords.contains(new_start) && !pathDFS.contains(new_start)) {
+					pathDFS.add(new_start);
 					if(helperDFS(new_start, end, dict)) {
 						return true;
 					}
 					else {
-						pathDFS.remove(start);
+						pathDFS.remove(new_start);
 					}
 				}
 				startChar[i] = hold;
