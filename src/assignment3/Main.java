@@ -40,12 +40,13 @@ public class Main {
 			ps = System.out;			// default output to Stdout
 		}
 		initialize();
-        ArrayList<String> res = Main.getWordLadderBFS("smart", "money");
-        printLadder(res);
-        System.out.println();
-        //res = Main.getWordLadderDFS("smart", "money");
-        //printLadder(res);
 		// TODO methods to read in words, output ladder
+        ArrayList<String> input;
+        input = parse(kb);
+        while(input.size()!=0) {
+        	printLadder(getWordLadderBFS(input.get(0), input.get(1)));
+        	input = parse(kb);
+        }
 	}
 
     public static void initialize() {
@@ -66,8 +67,8 @@ public class Main {
     	ArrayList<String> inputList;
     	String[] input;
     	inputList = new ArrayList<String>();
-    	input = keyboard.next().toLowerCase().split(" ");
-    	if(input.length!=1 && !input[0].equals("/quit")) {
+    	input = keyboard.nextLine().toLowerCase().split("\\s+");
+    	if(input.length>1) {
     		inputList.add(input[0]);
     		inputList.add(input[1]);
     	}
@@ -87,7 +88,7 @@ public class Main {
 		ArrayList<String> res = new ArrayList<String>();
 		Set<String> dict = makeDictionary();
 		pathDFS.add(start);
-		if(!dict.contains(start.toUpperCase()) || !dict.contains(end.toUpperCase())) {
+		if(!dict.contains(start.toUpperCase()) || !dict.contains(end.toUpperCase()) || start.length()!=end.length()) {
 			res.add(start);
 			res.add(end);
 		}
@@ -119,7 +120,7 @@ public class Main {
     	HashMap<String, String> map = new HashMap(); //created a hashmap instead of set to keep track of visited words and path between start and end
     	q.add(start);
 		String prev_word="";
-        if(!dict.contains(start.toUpperCase())|| !dict.contains(end.toUpperCase())){
+        if(!dict.contains(start.toUpperCase())|| !dict.contains(end.toUpperCase()) || start.length()!=end.length()){
             res.add(start);
             res.add(end);
             return res; // replace this line later with real return
