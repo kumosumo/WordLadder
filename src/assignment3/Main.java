@@ -98,7 +98,7 @@ public class Main {
     	HashMap<String, String> map = new HashMap(); //created a hashmap instead of set to keep track of visited words and path between start and end
     	q.add(start);
 		String prev_word="";
-		if(!dict.contains(start)|| !dict.contains(end)){
+        if(!dict.contains(start.toUpperCase())|| !dict.contains(end.toUpperCase())){
             res.add(start);
             res.add(end);
             return res; // replace this line later with real return
@@ -155,7 +155,7 @@ public class Main {
 	
 	public static void printLadder(ArrayList<String> ladder) {
         if(ladder.size()==2)
-            System.out.println("no word ladder exists between " + ladder.get(0) + " and " + ladder.get(1));
+            System.out.println("no word ladder can be found between " + ladder.get(0) + " and " + ladder.get(1));
         else{
             System.out.println("a " + (ladder.size()-2) + "-rung world ladder exists between "+ ladder.get(0) + " and " + ladder.get(ladder.size()-1));
             for( String s : ladder){
