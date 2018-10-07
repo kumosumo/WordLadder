@@ -21,6 +21,7 @@ public class Main {
 	
 	// static variables and constants only here.
 	static ArrayList<String> badWords;
+	static HashMap<String, String> pathDFS;
 
 	public static void main(String[] args) throws Exception {
 
@@ -46,6 +47,7 @@ public class Main {
         // We will call this method before running our JUNIT tests.  So call it
         // only once at the start of main.
         badWords = new ArrayList<String>();
+        pathDFS = new HashMap<String, String>();
     }
 
 	/**
@@ -65,15 +67,27 @@ public class Main {
     	}
     	return inputList;
     }
-	
+	  
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		// Returned list should be ordered start to end.  Include start and end.
 		// If ladder is empty, return list with just start and end.
-		// TODO some code
+		ArrayList<String> res = new ArrayList<String>();
 		Set<String> dict = makeDictionary();
-		// TODO more code
-		
-		return null; // replace this line later with real return
+		pathDFS.put(null, start);
+		if(!dict.contains(start.toUpperCase()) || !dict.contains(end.toUpperCase())) {
+			res.add(start);
+			res.add(end);
+		}
+		if(helperDFS(start, end, dict)) {
+			for(String word : pathDFS.values()) {
+				res.add(word);
+			}
+		}
+		else {
+			res.add(start);
+			res.add(end);
+		}
+		return res; // replace this line later with real return
 	}
 	
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
@@ -151,8 +165,37 @@ public class Main {
 	}
 	// TODO
 	// Other private static methods here
-
-
+	private static boolean helperDFS(String start, String end, Set<String> dict) {
+		char[] startChar;
+		String new_start;
+		char hold;
+		if(start.equals(end)) {
+			return true;
+		}
+		startChar = start.toCharArray();
+		for(int i =0; i<startChar.length; i++) {
+			for(char j='a'; j<='z'; j++) {
+				hold = startChar[i];
+				if(startChar[i]!=j) {
+					startChar[i]=j;
+				}
+				new_start = new String(startChar);
+				if(dict.contains(new_start.toUpperCase()) && !badWords.contains(new_start) && !pathDFS.containsKey(new_start) && !pathDFS.containsValue(new_start)) {
+					pathDFS.put(start, new_start);
+					if(helperDFS(new_start, end, dict)) {
+						return true;
+					}
+					else {
+						pathDFS.remove(start);
+					}
+				}
+				startChar[i] = hold;
+			}
+		}
+		badWords.add(start);
+		return false;
+	}
+	
 	/* Do not modify makeDictionary */
 	public static Set<String>  makeDictionary () {
 		Set<String> words = new HashSet<String>();
